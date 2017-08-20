@@ -1,0 +1,97 @@
+<!--
+  ~ Hibernate, Relational Persistence for Idiomatic Java
+  ~
+  ~ License: GNU Lesser General Public License (LGPL), version 2.1 or later.
+  ~ See the lgpl.txt file in the root directory or <http://www.gnu.org/licenses/lgpl-2.1.html>.
+  -->
+<!DOCTYPE hibernate-configuration PUBLIC
+        "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+        "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+
+<hibernate-configuration>
+    <session-factory>
+        
+   <!-- <property name="connection.driver_class">com.mysql.jdbc.Driver</property>
+        <property name="connection.url">jdbc:mysql://localhost:3306/test_db</property>
+        <property name="connection.username">root</property>
+        <property name="connection.password">xxx</property>
+
+        <property name="connection.pool_size">1</property>
+        <property name="dialect">org.hibernate.dialect.MySQLDialect</property>
+        <property name="current_session_context_class">thread</property>
+        <property name="cache.provider_class">org.hibernate.cache.NoCacheProvider</property>
+        <property name="show_sql">true</property>
+        <property name="hbm2ddl.auto">validate</property> -->  
+        
+       
+        <property name="hibernate.connection.driver_class">org.postgresql.Driver</property>
+        <property name="hibernate.connection.url">jdbc:postgresql://localhost:5432/hibernatedb</property>
+        <property name="hibernate.connection.username">postgres</property>
+        <property name="hibernate.connection.password">equinox09</property>
+       
+       <!-- SQL Dialect -->
+		<property name="hibernate.dialect">org.hibernate.dialect.PostgreSQLDialect</property>
+
+		<!-- Cache Provider -->
+		<property name="cache.provider_class">org.hibernate.cache.internal.NoCachingRegionFactory</property>
+		
+		<!-- Second Level Cache -->
+		<property name="hibernate.cache.use_second_level_cache">true</property>
+		
+		
+		<!-- <property name="hibernate.cache.region.factory_class">net.sf.ehcache.hibernate.EhCacheRegionFactory</property>
+		
+		<property name="net.sf.ehcache.configurationResourceName">/myehcache.xml</property>
+		-->
+		<!-- EH Cache Provider -->
+		<property name="hibernate.cache.provider_class">org.hibernate.cache.EhCacheProvider</property>
+		<property name="hibernate.cache.region.factory_class">org.hibernate.cache.ehcache.EhCacheRegionFactory</property>
+		
+		
+		<!-- Hibernate Query cache is different from Second Level Cache -->
+		<property name="hibernate.cache.use_query_cache">true</property>
+		
+		<!-- Connection Pool Size -->
+        <property name="connection_pool_size">1</property>
+
+		<!-- Drop and re-create the data schema on startup -->
+		<!-- create , update -->
+        <property name="hbm2ddl.auto">update</property>
+
+		<!-- Show Sql queries in console -->
+        <property name="show_sql">true</property>
+        
+        <!-- Current Session Context Class -->
+        <property name="hibernate.current_session_context_class">thread</property>
+        
+        <!-- <property name="connection.autocommit">true</property> -->
+
+		<!-- Entities -->
+		<mapping class="com.hibernate.tutorial.UserDetails"/>
+		<mapping class="com.hibernate.tutorial.Vehicle"/>
+		<mapping class="com.hibernate.tutorial.Phone"/>
+		<mapping class="com.hibernate.tutorial.Company"/>
+		<mapping class="com.hibernate.tutorial.GrabBike"/>
+			<!-- Single table Strategy -->
+		<mapping class="com.hibernate.tutorial.Animal"/>
+		<mapping class="com.hibernate.tutorial.Dog"/>
+		<mapping class="com.hibernate.tutorial.Cat"/>
+		<!-- Table Per Class Strategy -->
+		<mapping class="com.hibernate.tutorial.Shape"/>
+		<mapping class="com.hibernate.tutorial.Square"/>
+		<mapping class="com.hibernate.tutorial.Rectangle"/>
+		
+	<!--	
+		<session-factory>
+		    <mapping package="test.animals"/>
+		    <mapping class="test.Flight"/>
+		    <mapping class="test.Sky"/>
+		    <mapping class="test.Person"/>
+		    <mapping class="test.animals.Dog"/>
+		
+		    <mapping resource="test/animals/orm.xml"/>
+		  </session-factory>
+		   -->
+        
+    </session-factory>
+</hibernate-configuration>
