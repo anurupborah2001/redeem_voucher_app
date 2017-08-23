@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:jdbc="http://www.springframework.org/schema/jdbc"
+	xmlns:jpa="http://www.springframework.org/schema/data/jpa"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc-4.0.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/data/jpa http://www.springframework.org/schema/data/jpa/spring-jpa-1.8.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.0.xsd">
+
+		
+
+	    <context:property-placeholder location="classpath*:/*.properties" />
+		 
+		<bean id="datasource"
+		class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+			<property name="driverClassName" value="${database.driverClassName}" />
+			<property name="url" value="${database.url}" />
+			<property name="username" value="${database.username}" />
+			<property name="password" value="${database.password}" />
+		</bean>
+		
+		<bean id="sessionFactory"
+		    class="org.springframework.orm.hibernate5.LocalSessionFactoryBean">
+		    <property name="dataSource" ref="datasource"/>
+		    <property name="packagesToScan" value="com.jwt.redeem.entities"/>
+		    <property name="configLocation" value="classpath:/hibernate.cfg.xml" />
+		</bean>
+	
+	
+	<bean id="multipartResolver"
+    class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+	<!-- one of the properties available; the maximum file size in bytes -->
+	    <property name="maxUploadSize" value="10000000" />
+	</bean>
+	
+	
+	<bean id="jpaVendorAdapter" class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter">
+        <property name="showSql" value="${jpa.showSql}"/>
+        <property name="generateDdl" value="${jpa.generateDdl}"/>
+        <property name="database" value="${jpa.database}"/>
+    </bean>
+	
+	 <bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
+        <property name="dataSource" ref="datasource"/>
+        <property name="jpaVendorAdapter" ref="jpaVendorAdapter"/>
+        <property name="jpaProperties">
+        <map>
+        	<entry key="hibernate.hbm2ddl.auto" value="${hibernate.hbm2ddl.auto}"/>
+            <entry key="hibernate.show_sql" value="${hibernate.show_sql}"/>
+            <entry key="hibernate.cache.region.factory_class" value="${jpa.secondlevelcache}"></entry>
+        </map>
+       </property>
+        <!-- spring based scanning for entity classes>-->
+        <property name="packagesToScan" value="com.jwt.redeem.entities"/>
+    </bean>
+    
+    	<!-- transaction manager -->
+	
+	
+	 <bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
+        <property name="entityManagerFactory" ref="entityManagerFactory" />
+    </bean>
+	
+	<bean id="hibernateTemplate" class="org.springframework.orm.hibernate5.HibernateTemplate">
+		<constructor-arg name="sessionFactory" ref="sessionFactory"/>  
+	</bean>
+	
+	<bean name="appUserLoginService" class="com.jwt.redeem.service.AppUserDetailLoginService"/>
+	<bean name="userService" class="com.jwt.redeem.service.UserServiceImpl"/>
+	<bean name="userDaoRepo" class="com.jwt.redeem.dao.UserDaoImpl"/>
+	<bean name="dealService" class="com.jwt.redeem.service.DealServiceImpl"/>
+	<bean name="dealDao" class="com.jwt.redeem.dao.DealDaoImpl"/>
+	
+	<tx:annotation-driven transaction-manager="transactionManager" />
+	
+	<jpa:repositories base-package="com.jwt.redeem.repositories"/>	
+	
+</beans>
